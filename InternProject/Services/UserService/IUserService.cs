@@ -1,6 +1,6 @@
 ﻿using InternProject.Dtos;
 
-namespace InternProject.Services
+namespace InternProject.Services.UserService
 {
     public interface IUserService
     {

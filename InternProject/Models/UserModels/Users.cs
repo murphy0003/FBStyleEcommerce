@@ -1,6 +1,9 @@
-﻿namespace InternProject.Models
+﻿using InternProject.Models.ImageModels;
+using InternProject.Models.PostModels;
+
+namespace InternProject.Models.UserModels
 {
-    public class User
+    public class Users
     {
         public Guid UserId { get; set; }
         public required string UserName { get; set; }
@@ -25,7 +28,8 @@
         public DateTime? LockoutEnd { get; set; }
         public bool IsPasswordResetVerified { get; set; }
 
-        public ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Posts> Posts { get; set; } = new HashSet<Posts>();
+        public virtual ICollection<Images> Images { get; set; } = new HashSet<Images>();
 
     }
 }

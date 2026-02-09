@@ -1,4 +1,4 @@
-﻿namespace InternProject.Models
+﻿namespace InternProject.Models.PostModels
 {
     public enum ItemStatus
     {

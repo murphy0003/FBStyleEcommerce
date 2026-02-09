@@ -1,4 +1,4 @@
-﻿namespace InternProject.Models
+﻿namespace InternProject.Models.UserModels
 {
     public enum  AccountStatus
     {

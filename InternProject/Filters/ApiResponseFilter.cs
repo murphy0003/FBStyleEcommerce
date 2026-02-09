@@ -1,4 +1,4 @@
-﻿using InternProject.Models;
+﻿using InternProject.Models.ApiModels;
 using MailKit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

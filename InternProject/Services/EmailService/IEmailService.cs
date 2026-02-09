@@ -1,4 +1,4 @@
-﻿namespace InternProject.Services
+﻿namespace InternProject.Services.EmailService
 {
     public interface IEmailService
     {

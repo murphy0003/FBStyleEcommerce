@@ -1,15 +1,15 @@
-﻿using InternProject.Models;
+﻿using InternProject.Models.UserModels;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace InternProject.Services
+namespace InternProject.Services.TokenService
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {
-        public string CreateToken(User user)
+        public string CreateToken(Users user)
         {
             var claims = new List<Claim>
             {

@@ -1,4 +1,4 @@
-﻿namespace InternProject.Services
+﻿namespace InternProject.Services.CookieService
 {
     public interface ICookieService
     {

@@ -1,4 +1,4 @@
-﻿using InternProject.Models;
+﻿using InternProject.Models.ApiModels;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 

@@ -1,6 +1,7 @@
 ﻿using InternProject.Dtos;
-using InternProject.Models;
-using InternProject.Services;
+using InternProject.Models.ApiModels;
+using InternProject.Services.CookieService;
+using InternProject.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,7 +82,9 @@ namespace InternProject.Controllers
             }
 
             cookieService.DeleteRefreshTokenCookie();
-
+            Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
+            Response.Headers.Pragma = "no-cache";
+            Response.Headers.Expires = "0";
             HttpContext.Items["ResponseMessage"] = "Logged out successfully";
 
             return Ok();

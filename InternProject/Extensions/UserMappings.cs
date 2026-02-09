@@ -1,13 +1,12 @@
 ﻿using InternProject.Dtos;
-using InternProject.Models;
-
+using InternProject.Models.UserModels;
 namespace InternProject.Extensions
 {
     public static class UserMappings
     {
-        public static User ToV1Model(RegisterV1UserDto registerUserDto)
+        public static Users ToV1Model(RegisterV1UserDto registerUserDto)
         {
-            return new User
+            return new Users
             {
                 UserName = registerUserDto.UserName,
                 Email = registerUserDto.Email,
@@ -20,9 +19,9 @@ namespace InternProject.Extensions
                 Status = AccountStatus.Pending
             };
         }
-        public static User ToV2Model(RegisterV2UserInitDto registerV2UserInitDto)
+        public static Users ToV2Model(RegisterV2UserInitDto registerV2UserInitDto)
         {
-            return new User
+            return new Users
             {
                 UserName = registerV2UserInitDto.UserName,
                 Email = registerV2UserInitDto.Email,

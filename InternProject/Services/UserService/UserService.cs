@@ -1,12 +1,15 @@
 ﻿using InternProject.Data;
 using InternProject.Dtos;
 using InternProject.Extensions;
-using InternProject.Models;
+using InternProject.Models.ApiModels;
+using InternProject.Models.UserModels;
+using InternProject.Services.EmailService;
+using InternProject.Services.TokenService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
-namespace InternProject.Services
+namespace InternProject.Services.UserService
 {
     public class UserService(AppDbContext context,IEmailService emailService,ITokenService tokenService) : IUserService
     {
@@ -154,7 +157,7 @@ namespace InternProject.Services
             return (response, refreshToken);
         }
 
-        private async Task<LoginResponseDto?> CreateTokenResponse(User? user)
+        private async Task<LoginResponseDto?> CreateTokenResponse(Users? user)
         {
             return new LoginResponseDto
                         (
@@ -198,7 +201,7 @@ namespace InternProject.Services
            
 
 
-        private async Task<User?> ValidateRefreshTokenAsync(string refreshToken,CancellationToken cancellationToken)
+        private async Task<Users?> ValidateRefreshTokenAsync(string refreshToken,CancellationToken cancellationToken)
         {
             var user = await context.Users.FirstOrDefaultAsync(u=>u.RefreshToken==refreshToken,cancellationToken);
             if(user is null 
@@ -284,7 +287,7 @@ namespace InternProject.Services
             }
             user.IsEmailVerified = true;
             user.VerificationOtp = null;
-            user.Status = Models.AccountStatus.Active;
+            user.Status = AccountStatus.Active;
             user.VerificationAttempts = 0;
             user.OtpExpiry = null;
 

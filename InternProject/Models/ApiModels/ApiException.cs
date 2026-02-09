@@ -1,4 +1,4 @@
-﻿namespace InternProject.Models
+﻿namespace InternProject.Models.ApiModels
 {
     public class ApiException(String Code , object? Details , int StatusCode) : Exception
     {

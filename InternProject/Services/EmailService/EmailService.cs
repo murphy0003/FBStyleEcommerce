@@ -1,8 +1,7 @@
-﻿
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace InternProject.Services
+namespace InternProject.Services.EmailService
 {
     public class EmailService(IConfiguration config) : IEmailService
     {

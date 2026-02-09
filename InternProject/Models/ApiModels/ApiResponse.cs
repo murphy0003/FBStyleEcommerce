@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi;
 
-namespace InternProject.Models
+namespace InternProject.Models.ApiModels
 {
     public class ApiResponse<T>(bool status, string message, T data, Object? meta = null)
     {

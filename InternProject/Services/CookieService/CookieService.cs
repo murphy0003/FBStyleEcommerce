@@ -1,7 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace InternProject.Services
+namespace InternProject.Services.CookieService
 {
     public class CookieService(IHttpContextAccessor httpContextAccessor) : ICookieService
     {

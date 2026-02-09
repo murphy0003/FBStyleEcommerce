@@ -1,4 +1,4 @@
-﻿namespace InternProject.Models
+﻿namespace InternProject.Models.ImageModels
 {
     public enum ImageOwnerType
     {

@@ -1,8 +1,7 @@
-﻿
-using InternProject.Data;
+﻿using InternProject.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace InternProject.BackgroundServices
+namespace InternProject.Services.UserService
 {
     public class RegistrationCleanupService(IServiceScopeFactory scopeFactory,ILogger<RegistrationCleanupService> logger) : BackgroundService
     {
