@@ -30,7 +30,7 @@ namespace InternProject.Services.EmailService
             try
             {
                 await client.ConnectAsync(config["SmtpSettings:Server"],
-                                        int.Parse(config["SmtpSettings:Port"]),
+                                        int.Parse(config["SmtpSettings:Port"]!),
                                         MailKit.Security.SecureSocketOptions.StartTls,cancellationToken);
 
                 await client.AuthenticateAsync(config["SmtpSettings:Username"], config["SmtpSettings:Password"],cancellationToken);

@@ -9,13 +9,13 @@ namespace InternProject.Services.TokenService
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {
-        public string CreateToken(Users user)
+        public string CreateToken(User user)
         {
             var claims = new List<Claim>
             {
-                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                 new Claim(ClaimTypes.Email, user.Email),
-                 new Claim(ClaimTypes.Role, user.Type.ToString())
+                 new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                 new(ClaimTypes.Email, user.Email),
+                 new(ClaimTypes.Role, user.Type.ToString())
             };
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Token")!));

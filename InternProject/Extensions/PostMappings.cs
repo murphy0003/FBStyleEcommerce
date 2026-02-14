@@ -7,9 +7,9 @@ namespace InternProject.Extensions
 {
     public static class PostMappings
     {
-        public static Posts ToModel(PostCreateDto postCreateDto)
+        public static Post ToModel(PostCreateDto postCreateDto)
         {
-            return new Posts
+            return new Post
             {
                 ItemName = postCreateDto.ItemName,
                 Price = postCreateDto.Price,
@@ -19,7 +19,7 @@ namespace InternProject.Extensions
                 CreatedAt = DateTime.UtcNow
             };
         }
-        public static PostResponseDto ToDto(Posts post, List<Images> images)
+        public static PostResponseDto ToDto(Post post, List<Images> images)
         {
             return new PostResponseDto(
                 post.PostId,
@@ -31,7 +31,7 @@ namespace InternProject.Extensions
                 [.. images.Select(i => new ImageResultDto(i.ImageId, i.Status))]
             );
         }
-        public static Posts UpdateModel(Posts posts, PostUpdateDto postUpdateDto)
+        public static Post UpdateModel(Post posts, PostUpdateDto postUpdateDto)
         {
             if (postUpdateDto.ItemName is not null)
                 posts.ItemName = postUpdateDto.ItemName.Trim();
@@ -55,7 +55,7 @@ namespace InternProject.Extensions
             posts.UpdatedAt = DateTime.UtcNow;
             return posts;
         }
-        public static GetPostResponseDto ToGetDto(Posts post)
+        public static GetPostResponseDto ToGetDto(Post post)
         {
             return new GetPostResponseDto(
                 post.PostId,
@@ -65,8 +65,8 @@ namespace InternProject.Extensions
                 post.ItemStatus.ToString(),
                 post.ItemCondition.ToString(),
                 post.SellerId,
-                (DateTime)post.CreatedAt!,
-                (DateTime)post.UpdatedAt!,
+                post.CreatedAt ?? DateTime.MinValue,
+                post.UpdatedAt ?? DateTime.MinValue,
                 [.. post.Images
                     .Where(i => i.Status == ImageStatus.Completed)
                     .OrderBy(i => i.CreatedAt)

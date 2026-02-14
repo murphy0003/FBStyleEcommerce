@@ -7,7 +7,7 @@ namespace InternProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController(PostService postService) : ControllerBase
+    public class PostController(IPostService postService) : ControllerBase
     {
         [HttpPost]
         public async Task<ActionResult> CreatePost(PostCreateDto postCreateDto, CancellationToken cancellationToken)
@@ -51,7 +51,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<ActionResult> GetPosts(int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        public async Task<ActionResult> GetPosts([FromQuery]int pageNumber = 1,[FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
         {
             var result = await postService.GetPostsAsync(pageNumber, pageSize, cancellationToken);
 

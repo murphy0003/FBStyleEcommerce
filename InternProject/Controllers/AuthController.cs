@@ -9,7 +9,7 @@ namespace InternProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController(IUserService userService, ICookieService cookieService) : ControllerBase
+    public class AuthController(IUserService userService , ICookieService cookieService) : ControllerBase
     {
         [HttpPost("register/v1")]
         public async Task<ActionResult> RegisterV1User(RegisterV1UserDto dto,CancellationToken cancellationToken)

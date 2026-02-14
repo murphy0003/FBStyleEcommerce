@@ -13,6 +13,9 @@ namespace InternProject.Services.UserService
 {
     public class UserService(AppDbContext context,IEmailService emailService,ITokenService tokenService) : IUserService
     {
+        private readonly AppDbContext context = context;
+        private readonly IEmailService emailService = emailService;
+        private readonly ITokenService tokenService = tokenService;
         public async Task RegisterV1UserAsync(RegisterV1UserDto dto, CancellationToken cancellationToken)
         {
             var userExists = await context.Users
@@ -100,7 +103,7 @@ namespace InternProject.Services.UserService
                     StatusCodes.Status400BadRequest);
             }
             user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-            user.Phone = String.Empty;
+            user.PhoneNumber = String.Empty;
             user.IsRegistrationCompleted = true;
             user.RegistrationExpiresAt = null;
             await context.SaveChangesAsync(cancellationToken);
@@ -157,12 +160,12 @@ namespace InternProject.Services.UserService
             return (response, refreshToken);
         }
 
-        private async Task<LoginResponseDto?> CreateTokenResponse(Users? user)
+        private async Task<LoginResponseDto?> CreateTokenResponse(User? user)
         {
             return new LoginResponseDto
                         (
-                            tokenService.CreateToken(user),
-                            user.UserName
+                            tokenService.CreateToken(user!),
+                            user!.UserName
                         );
         }
 
@@ -201,7 +204,7 @@ namespace InternProject.Services.UserService
            
 
 
-        private async Task<Users?> ValidateRefreshTokenAsync(string refreshToken,CancellationToken cancellationToken)
+        private async Task<User?> ValidateRefreshTokenAsync(string refreshToken,CancellationToken cancellationToken)
         {
             var user = await context.Users.FirstOrDefaultAsync(u=>u.RefreshToken==refreshToken,cancellationToken);
             if(user is null 

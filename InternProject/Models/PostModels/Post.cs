@@ -3,7 +3,7 @@ using InternProject.Models.UserModels;
 
 namespace InternProject.Models.PostModels
 {
-    public class Posts
+    public class Post
     {
         public Guid PostId { get; set; }
         public required string ItemName { get; set; }
@@ -15,7 +15,7 @@ namespace InternProject.Models.PostModels
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public Guid SellerId { get; set; }
-        public virtual Users Seller {  get; set; } = null!;
+        public virtual User Seller {  get; set; } = null!;
         public virtual ICollection<Images> Images { get; set; } = new HashSet<Images>();
     }
 }

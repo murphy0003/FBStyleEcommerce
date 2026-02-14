@@ -5,13 +5,15 @@ using InternProject.Extensions;
 using InternProject.Models.ApiModels;
 using InternProject.Models.ImageModels;
 using InternProject.Models.PagingModels;
+using InternProject.Services.FeedService;
 using InternProject.Services.ImageService;
 using InternProject.Services.UserService;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternProject.Services.PostService
 {
-    public class PostService(AppDbContext context,IUserContext userContext,ImageQueue imageQueue,IImageCleanupService imageCleanupService) : IPostService
+    public class PostService(AppDbContext context,IUserContext userContext,ImageQueue imageQueue,IImageCleanupService imageCleanupService, IHubContext<FeedHub> hubContext) : IPostService
     {
         public async Task<PostResponseDto> CreatePostAsync(PostCreateDto dto, CancellationToken ct)
         {
@@ -54,6 +56,12 @@ namespace InternProject.Services.PostService
                 await context.Images.AddRangeAsync(images, ct);
                 await context.SaveChangesAsync(ct); // ImageIds generated
 
+                var broadcastData = await context.Posts
+                .Where(p => p.PostId == post.PostId)
+                .ProjectToFeedDto()
+                .FirstOrDefaultAsync(ct);
+                await hubContext.Clients.All.SendAsync("OnNewPost", broadcastData, cancellationToken: ct);
+
                 // Enqueue background jobs (order preserved)
                 for (int i = 0; i < images.Count; i++)
                 {
@@ -68,6 +76,7 @@ namespace InternProject.Services.PostService
                 await transaction.RollbackAsync(ct);
                 throw;
             }
+            
         }
         private static void ValidateAndDecodeBase64(string base64)
         {
@@ -155,9 +164,7 @@ namespace InternProject.Services.PostService
                 if (keepImages.Any(id => !existingImageIds.Contains(id)))
                     throw new ApiException("INVALID_IMAGE_ID", null, StatusCodes.Status400BadRequest);
 
-                imagesToDelete = post.Images
-                    .Where(i => !keepImages.Contains(i.ImageId))
-                    .ToList();
+                imagesToDelete = [.. post.Images.Where(i => !keepImages.Contains(i.ImageId))];
 
                 context.Images.RemoveRange(imagesToDelete);
 

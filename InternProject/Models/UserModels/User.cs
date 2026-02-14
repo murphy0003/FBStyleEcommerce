@@ -1,15 +1,16 @@
-﻿using InternProject.Models.ImageModels;
+﻿using InternProject.Models.AddressModels;
 using InternProject.Models.PostModels;
+using InternProject.Models.ProfileModels;
 
 namespace InternProject.Models.UserModels
 {
-    public class Users
+    public class User
     {
         public Guid UserId { get; set; }
         public required string UserName { get; set; }
         public required string Email { get; set; }
         public string? Password { get; set; }
-        public string Phone { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
         public string? GoogleId {  get; set; }
         public AccountType Type { get; set; }
         public AccountStatus Status { get; set; }
@@ -27,9 +28,8 @@ namespace InternProject.Models.UserModels
         public int AccessFailedCount { get; set; } = 0;
         public DateTime? LockoutEnd { get; set; }
         public bool IsPasswordResetVerified { get; set; }
-
-        public virtual ICollection<Posts> Posts { get; set; } = new HashSet<Posts>();
-        public virtual ICollection<Images> Images { get; set; } = new HashSet<Images>();
-
+        public virtual Profile Profile { get; set; } = null!;
+        public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+        public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
     }
 }

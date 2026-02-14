@@ -6,7 +6,7 @@ namespace InternProject.Dtos
         [Required] string UserName,
         [Required, EmailAddress] string Email,
         [Required, StringLength(100, MinimumLength = 6)] string Password,
-        [Required] string Phone,
+        [Required] string PhoneNumber,
         [Required] string AccountType);
     public record RegisterV2UserInitDto(
         [Required] string UserName,

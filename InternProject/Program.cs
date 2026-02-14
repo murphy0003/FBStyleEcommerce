@@ -1,10 +1,14 @@
 using InternProject.Data;
 using InternProject.Filters;
 using InternProject.Middleware;
+using InternProject.Services.AddressService;
+using InternProject.Services.BlueMarkService;
 using InternProject.Services.CookieService;
 using InternProject.Services.EmailService;
+using InternProject.Services.FeedService;
 using InternProject.Services.ImageService;
 using InternProject.Services.PostService;
+using InternProject.Services.ProfileService;
 using InternProject.Services.TokenService;
 using InternProject.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -47,6 +51,13 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddSingleton<ImageQueue>();
 builder.Services.AddHostedService<RegistrationCleanupService>();
 builder.Services.AddHostedService<ImageBackgroundWorker>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IBlueMarkService, BlueMarkService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddSignalR();
+builder.Services.AddOutputCache();
+builder.Services.AddScoped<FeedService>();
+builder.Services.AddScoped<IFeedService, FeedService>();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ApiResponseFilter>();
@@ -84,6 +95,9 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseOutputCache();
+
+app.MapHub<FeedHub>("/feedHub");
 
 app.MapControllers();
 

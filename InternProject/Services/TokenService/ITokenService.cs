@@ -4,7 +4,7 @@ namespace InternProject.Services.TokenService
 {
     public interface ITokenService
     {
-        string CreateToken(Users user);
+        string CreateToken(User user);
         string GenerateRefreshToken();
     }
 }
