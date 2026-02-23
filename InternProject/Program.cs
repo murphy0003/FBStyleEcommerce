@@ -7,6 +7,7 @@ using InternProject.Services.CookieService;
 using InternProject.Services.EmailService;
 using InternProject.Services.FeedService;
 using InternProject.Services.ImageService;
+using InternProject.Services.OrderService;
 using InternProject.Services.PostService;
 using InternProject.Services.ProfileService;
 using InternProject.Services.TokenService;
@@ -54,10 +55,12 @@ builder.Services.AddHostedService<ImageBackgroundWorker>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IBlueMarkService, BlueMarkService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IOrderService , OrderService>();
 builder.Services.AddSignalR();
 builder.Services.AddOutputCache();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<IFeedService, FeedService>();
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ApiResponseFilter>();

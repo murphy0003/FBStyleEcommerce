@@ -214,7 +214,7 @@ namespace InternProject.Services.PostService
                     null,
                     StatusCodes.Status404NotFound
                 )
-                : PostMappings.ToGetDto(post);
+                : PostMappings.MapToSingleDto(post);
         }
 
         public async Task<PaginationModel<GetPostResponseDto>> GetPostsAsync(int pageNumber, int pageSize, CancellationToken cancellationToken)
@@ -228,14 +228,11 @@ namespace InternProject.Services.PostService
             pageSize = pageSize > 50 ? 50 : (pageSize < 1 ? 10 : pageSize);
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
 
-            var query = context.Posts
+            return await context.Posts
                 .AsNoTracking()
                 .Where(p => p.SellerId == userId)
-                .Include(p => p.Images)
-                .OrderByDescending(p => p.CreatedAt);
-
-            return await query
-                .Select(p => PostMappings.ToGetDto(p))
+                .OrderByDescending(p => p.CreatedAt)
+                .Select(PostMappings.ToGetDto)
                 .ToPaginatedListAsync(pageNumber, pageSize);
         }
     }

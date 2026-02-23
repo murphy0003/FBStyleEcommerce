@@ -13,9 +13,10 @@ namespace InternProject.Services.TokenService
         {
             var claims = new List<Claim>
             {
-                 new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                 new(ClaimTypes.Email, user.Email),
-                 new(ClaimTypes.Role, user.Type.ToString())
+                 new(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                 new(JwtRegisteredClaimNames.Email, user.Email),
+                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                 new("role", user.Type.ToString())
             };
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Token")!));

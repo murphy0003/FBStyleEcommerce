@@ -2,6 +2,7 @@
 using InternProject.Models.ImageModels;
 using InternProject.Models.PostModels;
 using Microsoft.Extensions.Hosting;
+using System.Linq.Expressions;
 
 namespace InternProject.Extensions
 {
@@ -55,23 +56,29 @@ namespace InternProject.Extensions
             posts.UpdatedAt = DateTime.UtcNow;
             return posts;
         }
-        public static GetPostResponseDto ToGetDto(Post post)
+        public static Expression<Func<Post, GetPostResponseDto>> ToGetDto =>
+        post => new GetPostResponseDto
+        (
+            post.PostId,
+            post.ItemName,
+            post.Description ?? string.Empty,
+            post.Price,
+            post.ItemStatus.ToString(),
+            post.ItemCondition.ToString(),
+            post.SellerId,
+            post.CreatedAt ?? DateTime.MinValue,
+            post.UpdatedAt ?? DateTime.MinValue,
+            post.Images
+                .Where(i => i.Status == ImageStatus.Completed)
+                .OrderBy(i => i.CreatedAt)
+                .Select(i => new PostImageDto(i.ImageId, i.ImageUrl, i.Status.ToString()))
+                .ToList()
+        );
+
+        public static GetPostResponseDto MapToSingleDto(Post post)
         {
-            return new GetPostResponseDto(
-                post.PostId,
-                post.ItemName,
-                post.Description!,
-                post.Price,
-                post.ItemStatus.ToString(),
-                post.ItemCondition.ToString(),
-                post.SellerId,
-                post.CreatedAt ?? DateTime.MinValue,
-                post.UpdatedAt ?? DateTime.MinValue,
-                [.. post.Images
-                    .Where(i => i.Status == ImageStatus.Completed)
-                    .OrderBy(i => i.CreatedAt)
-                    .Select(i => new PostImageDto(i.ImageId, i.ImageUrl , i.Status.ToString()))]
-            );
+            var mapper = ToGetDto.Compile();
+            return mapper(post);
         }
     }
 }

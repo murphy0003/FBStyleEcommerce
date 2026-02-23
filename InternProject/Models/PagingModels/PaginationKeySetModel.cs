@@ -1,10 +1,10 @@
 ﻿namespace InternProject.Models.PagingModels
 {
-    public class PaginationKeySetModel<T>
+    public sealed class PaginationKeySetModel<T , TCursor>
     {
-        public IEnumerable<T> ItemsData { get; set; }
+        public IReadOnlyList<T> ItemsData { get; set; }
         public PaginationKeySetData Pagination { get; set; }
-        public PaginationKeySetModel(IEnumerable<T> itemsData , DateTime? cursor, bool? hasMore)
+        public PaginationKeySetModel(IReadOnlyList<T> itemsData , TCursor cursor, bool? hasMore)
         {
             this.ItemsData = itemsData;
             Pagination = new PaginationKeySetData
@@ -15,13 +15,10 @@
         }
         public class PaginationKeySetData
         {
-            public DateTime? Cursor { get; set; }
+            public TCursor? Cursor { get; set; }
             public bool? HasMore { get; set; }
         }
 
 
     }
 }
-
-    
-

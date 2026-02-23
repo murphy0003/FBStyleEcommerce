@@ -17,7 +17,7 @@ namespace InternProject.Controllers
             Response.Headers.CacheControl = "no-cache";
             return Ok(result);
         }
-        [HttpPatch("{profileId:guid})")]
+        [HttpPatch("{profileId:guid}")]
         public async Task<ActionResult> UpdateProfile(Guid profileId,[FromBody] UpdateProfileRequestDto request, CancellationToken cancellationToken)
         {
             var result = await profileService.UpdateProfile(profileId,request, cancellationToken);
