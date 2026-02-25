@@ -1,5 +1,6 @@
 ﻿using InternProject.Dtos;
 using InternProject.Services.PostService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace InternProject.Controllers
     public class PostController(IPostService postService) : ControllerBase
     {
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreatePost(PostCreateDto postCreateDto, CancellationToken cancellationToken)
         {
             var result = await postService.CreatePostAsync(postCreateDto, cancellationToken);
@@ -19,6 +21,7 @@ namespace InternProject.Controllers
             return Accepted(result);
         }
         [HttpDelete("{postId:guid}")]
+        [Authorize]
         public async Task<ActionResult> DeletePost(Guid postId, CancellationToken cancellationToken)
         {
             await postService.DeletePostAsync(postId, cancellationToken);
@@ -28,6 +31,7 @@ namespace InternProject.Controllers
             return NoContent();
         }
         [HttpPatch("{postId:guid}")]
+        [Authorize]
         public async Task<ActionResult> UpdatePost(Guid postId, PostUpdateDto postUpdateDto, CancellationToken cancellationToken)
         {
             var result = await postService.UpdatePostAsync(postId, postUpdateDto, cancellationToken);
@@ -40,6 +44,7 @@ namespace InternProject.Controllers
 
         }
         [HttpGet("{postId:guid}")]
+        [Authorize]
         public async Task<ActionResult> GetPost(Guid postId, CancellationToken cancellationToken)
         {
             var result = await postService.GetPostAsync(postId, cancellationToken);
@@ -51,6 +56,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetPosts([FromQuery]int pageNumber = 1,[FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
         {
             var result = await postService.GetPostsAsync(pageNumber, pageSize, cancellationToken);

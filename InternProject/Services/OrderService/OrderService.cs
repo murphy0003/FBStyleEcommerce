@@ -4,6 +4,7 @@ using InternProject.Extensions;
 using InternProject.Models.ApiModels;
 using InternProject.Models.OrderModels;
 using InternProject.Models.PagingModels;
+using InternProject.Models.UserModels;
 using InternProject.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 
@@ -99,7 +100,7 @@ namespace InternProject.Services.OrderService
                     null,
                     StatusCodes.Status404NotFound);
 
-            if (order.OrderStatus == OrderStatus.Canceled ||
+            if (order.OrderStatus == OrderStatus.Cancelled ||
                 order.OrderStatus == OrderStatus.Rejected)
                 throw new ApiException(
                     "This order can no longer be modified.",
@@ -112,7 +113,7 @@ namespace InternProject.Services.OrderService
                     null,
                     StatusCodes.Status400BadRequest);
 
-            if (newStatus == OrderStatus.Canceled)
+            if (newStatus == OrderStatus.Cancelled)
             {
                 if (order.OrderStatus != OrderStatus.Pending)
                     throw new ApiException(
@@ -162,13 +163,24 @@ namespace InternProject.Services.OrderService
 
             await appDbContext.SaveChangesAsync(ct);
         }
-        public async Task<PaginationModel<OrderResponseV2Dto>> GetOrdersAsync(bool? isRead,int pageNumber,int pageSize)
+        public async Task<PaginationModel<OrderResponseV2Dto>> GetOrdersAsync(bool? isRead,int pageNumber,int pageSize , CancellationToken ct)
         {
             var currentUserId = userContext.GetCurrentUserId();
+            if (pageNumber <= 0)
+                throw new ApiException(
+                    "Page number must be greater than 0.",
+                    null,
+                    StatusCodes.Status400BadRequest);
+
+            if (pageSize <= 0 || pageSize > 50)
+                throw new ApiException(
+                    "Page size must be between 1 and 50.",
+                    null,
+                    StatusCodes.Status400BadRequest);
 
             var query = appDbContext.Orders
-                    .AsNoTracking()
-                    .Where(o => o.Profile.UserId == currentUserId);
+                .AsNoTracking()
+                .Where(o => o.Profile.UserId == currentUserId);
 
             if (isRead.HasValue)
                     query = query.Where(o => o.IsRead == isRead.Value);
@@ -177,6 +189,61 @@ namespace InternProject.Services.OrderService
                     .OrderByDescending(o => o.CreatedAt)
                     .Select(OrderMappings.ToResponseV2Dto) 
                     .ToPaginatedListAsync(pageNumber, pageSize);
+        }
+        public async Task<PaginationModel<OrderResponseV2Dto>> GetOrdersAsync(
+                OrderStatus? status,
+                int pageNumber,
+                int pageSize,
+                CancellationToken ct)
+        {
+            var currentUserId = userContext.GetCurrentUserId();
+
+            if (pageNumber <= 0)
+                throw new ApiException(
+                    "Page number must be greater than 0.",
+                    null,
+                    StatusCodes.Status400BadRequest);
+
+            if (pageSize <= 0 || pageSize > 50)
+                throw new ApiException(
+                    "Page size must be between 1 and 50.",
+                    null,
+                    StatusCodes.Status400BadRequest);
+
+            var query = appDbContext.Orders
+                .AsNoTracking()
+                .Where(o => o.Profile.UserId == currentUserId);
+
+            if (status.HasValue)
+            {
+                if (!Enum.IsDefined(status.Value))
+                    throw new ApiException(
+                        "Invalid order status.",
+                        null,
+                        StatusCodes.Status400BadRequest);
+
+                query = query.Where(o => o.OrderStatus == status.Value);
+            }
+
+            return await query
+                .OrderByDescending(o => o.CreatedAt)
+                .Select(OrderMappings.ToResponseV2Dto)
+                .ToPaginatedListAsync(pageNumber, pageSize);
+        }
+
+        public async Task<OrderStatisticsDto> GetOrderStatisticsAsync(CancellationToken cancellationToken)
+        {
+            var currentUserId = userContext.GetCurrentUserId();
+
+            var query = appDbContext.Orders
+                .AsNoTracking()
+                .Where(o => o.Profile.UserId == currentUserId);
+
+            var total = await query.CountAsync(cancellationToken);
+            var Delivered = await query.CountAsync(o => o.OrderStatus == OrderStatus.Delivered, cancellationToken);
+            var cancelled = await query.CountAsync(o => o.OrderStatus == OrderStatus.Cancelled, cancellationToken);
+
+            return new OrderStatisticsDto(total, Delivered , cancelled);
         }
     }
 }

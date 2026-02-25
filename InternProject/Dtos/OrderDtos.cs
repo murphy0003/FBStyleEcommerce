@@ -31,4 +31,9 @@
         string ShippingAddress,
         string PostImageUrl
     );
+    public record OrderStatisticsDto(
+        int TotalOrders,
+        int DeliveredOrders,
+        int CancelledOrders
+    );
 }

@@ -20,7 +20,7 @@ namespace InternProject.Extensions
                 .Take(pageSize)
                 .ToListAsync();
 
-            return new PaginationModel<T>(items, count, pageSize, pageIndex);
+            return new PaginationModel<T>(items, count,pageIndex, pageSize);
         }
     }
 }

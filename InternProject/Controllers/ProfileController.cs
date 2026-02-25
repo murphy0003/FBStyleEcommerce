@@ -1,5 +1,6 @@
 ﻿using InternProject.Dtos;
 using InternProject.Services.ProfileService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace InternProject.Controllers
     public class ProfileController(IProfileService profileService) : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetOrCreateProfile(CancellationToken cancellationToken)
         {
             var result = await profileService.GetOrCreateProfile(cancellationToken);
@@ -18,6 +20,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpPatch("{profileId:guid}")]
+        [Authorize]
         public async Task<ActionResult> UpdateProfile(Guid profileId,[FromBody] UpdateProfileRequestDto request, CancellationToken cancellationToken)
         {
             var result = await profileService.UpdateProfile(profileId,request, cancellationToken);

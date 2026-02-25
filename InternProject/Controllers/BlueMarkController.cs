@@ -1,5 +1,6 @@
 ﻿using InternProject.Dtos;
 using InternProject.Services.BlueMarkService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace InternProject.Controllers
     public class BlueMarkController(IBlueMarkService blueMarkService) : ControllerBase
     {
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateBlueMark(BlueMarkCreateDto blueMarkCreateDto, CancellationToken cancellationToken)
         {
             var result = await blueMarkService.CreateBlueMarkAsync(blueMarkCreateDto, cancellationToken);
@@ -18,6 +20,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpPatch]
+        [Authorize]
         public async Task<ActionResult> UpdateBlueMark(BlueMarkUpdateDto blueMarkUpdateDto, CancellationToken cancellationToken)
         {
             var result = await blueMarkService.UpdateBlueMarkAsync(blueMarkUpdateDto, cancellationToken);

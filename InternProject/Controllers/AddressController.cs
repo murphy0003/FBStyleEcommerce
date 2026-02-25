@@ -1,5 +1,6 @@
 ﻿using InternProject.Dtos;
 using InternProject.Services.AddressService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace InternProject.Controllers
     public class AddressController(IAddressService addressService) : ControllerBase
     {
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateAddress(AddressCreateDto addressCreateDto, CancellationToken cancellationToken)
         {
             await addressService.CreateAddressAsync(addressCreateDto, cancellationToken);
@@ -18,6 +20,7 @@ namespace InternProject.Controllers
             return Accepted();
         }
         [HttpPatch("{addressId:guid}")]
+        [Authorize]
         public async Task<ActionResult> UpdateAddress(Guid addressId, AddressUpdateDto addressUpdateDto, CancellationToken cancellationToken)
         {
             await addressService.UpdateAddressAsync(addressId, addressUpdateDto, cancellationToken);
@@ -26,6 +29,7 @@ namespace InternProject.Controllers
             return Accepted();
         }
         [HttpDelete("{addressId:guid}")]
+        [Authorize]
         public async Task<ActionResult> DeleteAddress(Guid addressId, CancellationToken cancellationToken)
         {
             await addressService.DeleteAddressAsync(addressId, cancellationToken);
@@ -33,6 +37,7 @@ namespace InternProject.Controllers
             return NoContent();
         }
         [HttpGet("{addressId:guid}")]
+        [Authorize]
         public async Task<ActionResult> GetAddress(Guid addressId, CancellationToken cancellationToken)
         {
             var result = await addressService.GetAddressAsync(addressId, cancellationToken);
@@ -41,6 +46,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetDefaultAddress(CancellationToken cancellationToken)
         {
             var result = await addressService.GetDefaultAddressAsync(cancellationToken);
@@ -49,6 +55,7 @@ namespace InternProject.Controllers
             return Ok(result);
         }
         [HttpGet("List")]
+        [Authorize]
         public async Task<ActionResult> GetUserAddresses(CancellationToken cancellationToken)
         {
             var result = await addressService.GetUserAddressesAsync(cancellationToken);
