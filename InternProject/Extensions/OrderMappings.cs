@@ -1,4 +1,5 @@
 ﻿using InternProject.Dtos;
+using InternProject.Models.ImageModels;
 using InternProject.Models.OrderModels;
 using System.Linq.Expressions;
 
@@ -14,8 +15,8 @@ namespace InternProject.Extensions
                 ProfileId = profileId,
                 ItemName = itemName,
                 Price = price,
-                CustomerPhoneNumber = !string.IsNullOrEmpty(orderCreateDto.BuyerPhoneNumber) ? orderCreateDto.BuyerPhoneNumber : PhoneNumber,
-                ShippingAddress = !string.IsNullOrEmpty(orderCreateDto.ShippingAddress) ? orderCreateDto.ShippingAddress : address,
+                CustomerPhoneNumber = !string.IsNullOrWhiteSpace(orderCreateDto.BuyerPhoneNumber) ? orderCreateDto.BuyerPhoneNumber : PhoneNumber,
+                ShippingAddress = !string.IsNullOrWhiteSpace(orderCreateDto.ShippingAddress) ? orderCreateDto.ShippingAddress : address,
                 PostImageUrl = postimageUrl,
                 IsRead = false,
                 OrderStatus = OrderStatus.Pending,
@@ -38,6 +39,7 @@ namespace InternProject.Extensions
                 order.Profile.ProfileId,
                 order.Profile.DisplayName,
                 order.Profile.Images
+                    .Where(img => img.ImageOwnerType == ImageOwnerType.Profile && img.Status == ImageStatus.Completed)
                     .OrderByDescending(img => img.CreatedAt)
                     .Select(img => img.ImageUrl)
                     .FirstOrDefault() ?? string.Empty

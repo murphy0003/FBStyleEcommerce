@@ -16,10 +16,14 @@ namespace InternProject.Data
                     .IsDescending() 
                     .HasDatabaseName("IX_Posts_Feed_Pagination")
                     .IncludeProperties(p => p.ItemName);
-
             builder.HasOne(p => p.Seller)
                    .WithMany(u => u.Posts)
                    .HasForeignKey(p => p.SellerId)
+                   .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(p => p.Images)
+                   .WithOne()
+                   .HasForeignKey(i => i.OwnerId)
+                   .HasPrincipalKey(p=>p.PostId)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }

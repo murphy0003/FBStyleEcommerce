@@ -1,4 +1,5 @@
 ﻿using InternProject.Models.AddressModels;
+using InternProject.Models.BookMarkModels;
 using InternProject.Models.ImageModels;
 using InternProject.Models.OrderModels;
 using InternProject.Models.PostModels;
@@ -18,6 +19,7 @@ namespace InternProject.Data
         public DbSet<Address> Addresses => Set<Address>();
         public DbSet<SocialAddress> SocialAddresses => Set<SocialAddress>();
         public DbSet<Profile> Profiles => Set<Profile>();
+        public DbSet<BookMark> BookMarks => Set<BookMark>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

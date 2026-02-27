@@ -1,5 +1,4 @@
 ﻿using InternProject.Models.ProfileModels;
-using InternProject.Models.UserModels;
 
 namespace InternProject.Models.AddressModels
 {

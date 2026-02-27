@@ -72,7 +72,6 @@ namespace InternProject.Extensions
                 .Where(i => i.Status == ImageStatus.Completed)
                 .OrderBy(i => i.CreatedAt)
                 .Select(i => new PostImageDto(i.ImageId, i.ImageUrl, i.Status.ToString()))
-                .ToList()
         );
 
         public static GetPostResponseDto MapToSingleDto(Post post)

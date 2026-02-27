@@ -19,7 +19,7 @@ namespace InternProject.Services.FeedService
                 var query = appDbContext.Posts
                 .AsNoTracking()
                 .Where(p =>
-                    string.IsNullOrEmpty(itemName) ||
+                    string.IsNullOrWhiteSpace(itemName) ||
                     EF.Functions.Like(p.ItemName, $"%{itemName}%"))
                     .ProjectToFeedDto();
 

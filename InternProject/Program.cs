@@ -3,6 +3,7 @@ using InternProject.Filters;
 using InternProject.Middleware;
 using InternProject.Services.AddressService;
 using InternProject.Services.BlueMarkService;
+using InternProject.Services.BookMarkService;
 using InternProject.Services.CookieService;
 using InternProject.Services.EmailService;
 using InternProject.Services.FeedService;
@@ -60,6 +61,7 @@ builder.Services.AddSignalR();
 builder.Services.AddOutputCache();
 builder.Services.AddScoped<FeedService>();
 builder.Services.AddScoped<IFeedService, FeedService>();
+builder.Services.AddScoped<IBookMarkService, BookMarkService>();
 
 builder.Services.AddControllers(options =>
 {
