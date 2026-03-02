@@ -4,13 +4,13 @@ namespace InternProject.Extensions
 {
     public static class ImageMappings
     {
-        public static Images ToModel(string imageUrl, Guid ownerId, ImageOwnerType ownerType)
+        public static Images ToModel(Guid profileId,Guid postId , string imageUrl)
         {
             return new Images
             {
-                OwnerId = ownerId,
-                ImageUrl = imageUrl,
-                ImageOwnerType = ownerType
+                ProfileId = profileId,
+                PostId = postId,
+                ImageUrl = imageUrl
             };
         }
     }

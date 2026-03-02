@@ -48,9 +48,9 @@ namespace InternProject.Services.PostService
 
                 var images = dto.PostImages.Select(_ =>
                     ImageMappings.ToModel(
-                        string.Empty,
+                        Guid.Empty,
                         post.PostId,
-                        ImageOwnerType.Item
+                        string.Empty
                     )
                 ).ToList();
                 await context.Images.AddRangeAsync(images, ct);
@@ -170,9 +170,9 @@ namespace InternProject.Services.PostService
 
                 var newImages = newImagesInput.Select(_ =>
                     ImageMappings.ToModel(
-                        string.Empty,
+                        Guid.Empty,
                         post.PostId,
-                        ImageOwnerType.Item
+                        string.Empty
                     )
                 ).ToList();
 

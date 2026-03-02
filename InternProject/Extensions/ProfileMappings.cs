@@ -13,7 +13,7 @@ namespace InternProject.Extensions
                 p.DisplayName,
                 p.PhoneNumber,
                 p.Images
-                .Where(img => img.ImageOwnerType == ImageOwnerType.Profile && img.Status == ImageStatus.Completed)
+                .Where(img => img.ProfileId == p.ProfileId && img.Status == ImageStatus.Completed)
                 .OrderByDescending(img => img.CreatedAt) 
                 .Select(img => img.ImageUrl)
                 .FirstOrDefault(),

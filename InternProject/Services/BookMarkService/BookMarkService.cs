@@ -65,7 +65,7 @@ namespace InternProject.Services.BookMarkService
                     b.Post.ItemName,
                     b.Post.Price,
                     b.Post.Images
-                        .Where(img => img.ImageOwnerType == ImageOwnerType.Item)
+                        .Where(img => img.PostId == b.PostId)
                         .OrderBy(img => img.CreatedAt)
                         .Select(img => img.ImageUrl)
                         .FirstOrDefault()!,

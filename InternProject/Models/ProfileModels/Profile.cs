@@ -15,7 +15,7 @@ namespace InternProject.Models.ProfileModels
         public DateTime UpdatedAt { get; set; }
         public Guid UserId { get; set; }
         public virtual User User { get; set; } = null!;
-        public ICollection <Images> Images { get; set; } = new HashSet<Images>();
+        public virtual ICollection <Images> Images { get; set; } = new HashSet<Images>();
         public ICollection<SocialAddress> SocialAddresses { get; set; } = new HashSet<SocialAddress>();
     }
 }

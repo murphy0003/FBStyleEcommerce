@@ -36,10 +36,10 @@ namespace InternProject.Extensions
         public static Expression<Func<Order, OrderResponseV2Dto>> ToResponseV2Dto =>
         order => new OrderResponseV2Dto(
             new CustomerProfile(
-                order.Profile.ProfileId,
+                order.ProfileId,
                 order.Profile.DisplayName,
                 order.Profile.Images
-                    .Where(img => img.ImageOwnerType == ImageOwnerType.Profile && img.Status == ImageStatus.Completed)
+                    .Where(img => img.ProfileId == order.ProfileId && img.Status == ImageStatus.Completed)
                     .OrderByDescending(img => img.CreatedAt)
                     .Select(img => img.ImageUrl)
                     .FirstOrDefault() ?? string.Empty

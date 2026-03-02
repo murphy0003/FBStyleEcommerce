@@ -4,11 +4,9 @@ using InternProject.Extensions;
 using InternProject.Models.ApiModels;
 using InternProject.Models.ImageModels;
 using InternProject.Models.ProfileModels;
-using InternProject.Models.UserModels;
 using InternProject.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Memory;
 using SixLabors.ImageSharp.Processing;
 
 namespace InternProject.Services.ProfileService
@@ -76,7 +74,7 @@ namespace InternProject.Services.ProfileService
             string? savedFilePath = null;
             string? oldFilePath = null;
             var oldImage = profile.Images
-                .Where(img => img.ImageOwnerType.ToString() == "Profile")
+                .Where(img => img.ProfileId == profile.ProfileId)
                 .OrderByDescending(img => img.ImageId)
                 .FirstOrDefault();
 
@@ -99,8 +97,7 @@ namespace InternProject.Services.ProfileService
                     {
                         ImageId = newImageId,
                         ImageUrl = dbImageUrl,
-                        OwnerId = profile.ProfileId,
-                        ImageOwnerType = Enum.Parse<ImageOwnerType>("Profile"),
+                        ProfileId = profile.ProfileId,
                         CreatedAt = DateTime.UtcNow
                     };
 

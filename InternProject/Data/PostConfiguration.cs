@@ -21,9 +21,8 @@ namespace InternProject.Data
                    .HasForeignKey(p => p.SellerId)
                    .OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(p => p.Images)
-                   .WithOne()
-                   .HasForeignKey(i => i.OwnerId)
-                   .HasPrincipalKey(p=>p.PostId)
+                   .WithOne(i=>i.Post)
+                   .HasForeignKey(i => i.PostId)
                    .OnDelete(DeleteBehavior.Cascade);
         }
     }

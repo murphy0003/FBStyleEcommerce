@@ -1,4 +1,6 @@
 ﻿using InternProject.Models.ImageModels;
+using InternProject.Models.PostModels;
+using InternProject.Models.ProfileModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,14 +11,25 @@ namespace InternProject.Data
         public void Configure(EntityTypeBuilder<Images> builder)
         {
             builder.HasKey(e => e.ImageId);
-            builder.Property(e => e.ImageId).HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.Property(e => e.OwnerId).IsRequired();
+            builder.Property(e => e.ImageId)
+                   .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-            builder.HasIndex(e => new { e.OwnerId, e.ImageOwnerType , e.CreatedAt })
-                   .IsDescending()
-                   .HasDatabaseName("IX_Images_OwnerId_OwnerType")
-                   .IncludeProperties(img => img.ImageUrl);
+            // 🔹 Relationship to Post
+            builder.HasOne(e => e.Post)
+                   .WithMany(p => p.Images)
+                   .HasForeignKey(e => e.PostId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            // 🔹 Relationship to Profile
+            builder.HasOne(e => e.Profile)
+                   .WithMany(p => p.Images)
+                   .HasForeignKey(e => e.ProfileId)
+                   .OnDelete(DeleteBehavior.NoAction);
+
+            // Optional: Ensure at least one FK is indexed
+            builder.HasIndex(e => e.PostId);
+            builder.HasIndex(e => e.ProfileId);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace InternProject.Extensions
                     p.ItemStatus.ToString(),
                     p.CreatedAt ?? DateTime.MinValue,
                     p.Images
-                    .Where(img => img.ImageOwnerType == ImageOwnerType.Item && img.Status == ImageStatus.Completed)
+                    .Where(img => img.PostId == p.PostId && img.Status == ImageStatus.Completed)
                     .Select(s => s.ImageUrl)
                 ),
                 new ProfileDataDto(
@@ -28,7 +28,7 @@ namespace InternProject.Extensions
                     p.Seller.Profile.PhoneNumber,
                     p.Seller.Profile.BlueMark,
                     p.Seller.Profile.Images
-                        .Where(img => img.ImageOwnerType == ImageOwnerType.Profile  && img.Status == ImageStatus.Completed)
+                        .Where(img => img.ProfileId == p.Seller.Profile.ProfileId && img.Status == ImageStatus.Completed)
                         .OrderByDescending(img => img.CreatedAt)
                         .Select(img => img.ImageUrl)
                         .FirstOrDefault()
