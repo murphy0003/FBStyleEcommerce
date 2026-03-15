@@ -18,7 +18,7 @@ namespace InternProject.Models.OrderModels
         public DateTime UpdatedAt { get; set; }
         public Guid ProfileId { get; set; }
         public Guid PostId { get; set; }
-        public Profile Profile { get; set; } = null!;
+        public virtual Profile Profile { get; set; } = null!;
         public Post Post { get; set; } = null!;
 
     }

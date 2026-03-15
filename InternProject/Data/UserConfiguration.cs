@@ -10,7 +10,7 @@ namespace InternProject.Data
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(u => u.UserId);
-            builder.Property(u => u.UserId).HasDefaultValueSql("NEWSEQUENTIALID()");
+            builder.Property(u => u.UserId).ValueGeneratedOnAdd();
             builder.HasIndex(u => u.Email).IsUnique();
 
             builder.HasOne(u => u.Profile)

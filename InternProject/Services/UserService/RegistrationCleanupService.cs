@@ -32,7 +32,7 @@ namespace InternProject.Services.UserService
             if (expiredUsers.Count != 0)
             {
                 logger.LogInformation("Cleaning up {count} expired registrations", expiredUsers);
-                context.Users.Remove(expiredUsers[0]);
+                context.Users.RemoveRange(expiredUsers);
                 await context.SaveChangesAsync(stoppingToken);
             }
         }

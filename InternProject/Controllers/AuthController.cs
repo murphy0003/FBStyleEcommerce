@@ -50,8 +50,7 @@ namespace InternProject.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto,CancellationToken cancellationToken)
         {
-            
-            
+   
         var (loginResponse, refreshToken) = await userService.LoginUserAsync(loginDto,cancellationToken);
         cookieService.SetRefreshTokenCookie(refreshToken!, DateTime.UtcNow.AddDays(7));
         HttpContext.Items["ResponseMessage"] = "Login successful";

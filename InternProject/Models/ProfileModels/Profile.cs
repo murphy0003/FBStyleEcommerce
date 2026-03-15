@@ -16,6 +16,6 @@ namespace InternProject.Models.ProfileModels
         public Guid UserId { get; set; }
         public virtual User User { get; set; } = null!;
         public virtual ICollection <Images> Images { get; set; } = new HashSet<Images>();
-        public ICollection<SocialAddress> SocialAddresses { get; set; } = new HashSet<SocialAddress>();
+        public virtual ICollection<SocialAddress> SocialAddresses { get; set; } = new HashSet<SocialAddress>();
     }
 }

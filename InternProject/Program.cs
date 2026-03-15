@@ -23,8 +23,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(options
-    => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite("DataSource=:memory:"));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -37,7 +45,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
             ValidateLifetime = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
             ValidateIssuerSigningKey = true,
         };
     });
@@ -79,14 +87,15 @@ builder.Services.AddOpenApi();
 
 
 var app = builder.Build();
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Testing"))
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
@@ -95,6 +104,8 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseCookiePolicy();
 
 app.UseAuthentication();
 

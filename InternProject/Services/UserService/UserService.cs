@@ -19,7 +19,7 @@ namespace InternProject.Services.UserService
         public async Task RegisterV1UserAsync(RegisterV1UserDto dto, CancellationToken cancellationToken)
         {
             var userExists = await context.Users
-            .AnyAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase),cancellationToken);
+            .AnyAsync(u => u.Email.Equals(dto.Email.ToLower()),cancellationToken);
             if (userExists)
             {
                 throw new ApiException(
@@ -52,7 +52,7 @@ namespace InternProject.Services.UserService
         public async Task RegisterV2UserInitAsync(RegisterV2UserInitDto dto, CancellationToken cancellationToken)
         {
             var existingUser = await context.Users
-            .FirstOrDefaultAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email.Equals(dto.Email.ToLower()), cancellationToken);
             if (existingUser != null)
             {
                 if (existingUser.IsRegistrationCompleted)
@@ -89,7 +89,7 @@ namespace InternProject.Services.UserService
         }
         public async Task RegisterV2UserCompAsync(RegisterV2UserCompDto dto, CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email.ToLower()), cancellationToken);
             if (user == null ||
                 user.IsEmailVerified != true ||
                 user.IsRegistrationCompleted ||
@@ -111,7 +111,7 @@ namespace InternProject.Services.UserService
 
         public async Task<(LoginResponseDto?, string? refreshToken)> LoginUserAsync(LoginDto loginDto, CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(loginDto.Email, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(loginDto.Email.ToLower()), cancellationToken);
 
             var fakeHash = "$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgNo8z6ucl2j6H59zKk.58L.p0qK";
 
@@ -217,7 +217,7 @@ namespace InternProject.Services.UserService
 
         public async Task ResendOtpAsync(ResendOtpDto resendOtpDto,CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u=>u.Email.Equals(resendOtpDto.Email, StringComparison.CurrentCultureIgnoreCase),cancellationToken)
+            var user = await context.Users.FirstOrDefaultAsync(u=>u.Email.Equals(resendOtpDto.Email.ToLower()),cancellationToken)
                 ?? throw new ApiException(
                     "USER_NOT_FOUND",
                     new { email = resendOtpDto.Email },
@@ -251,7 +251,7 @@ namespace InternProject.Services.UserService
 
         public async Task VerifyRegisterEmailAsync(VerifyRegisterEmailDto dto,CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase), cancellationToken) ?? throw new ApiException(
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email.ToLower()), cancellationToken) ?? throw new ApiException(
             "USER_NOT_FOUND",
             new { email = dto.Email },
             StatusCodes.Status404NotFound
@@ -299,7 +299,7 @@ namespace InternProject.Services.UserService
 
         public async Task ForgetPasswordAsync(ForgetPasswordDto dto,CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u=>u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase),cancellationToken);
+            var user = await context.Users.FirstOrDefaultAsync(u=>u.Email.Equals(dto.Email.ToLower()),cancellationToken);
             if (user == null || user.Status != AccountStatus.Active)
             {
                 await Task.Delay(Random.Shared.Next(5, 30),cancellationToken);
@@ -318,7 +318,7 @@ namespace InternProject.Services.UserService
 
         public async Task VerifyForgetPasswordAsync(VerifyForgetPasswordDto dto,CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase),cancellationToken);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email.ToLower()),cancellationToken);
             if (user == null)
             {
                 await Task.Delay(Random.Shared.Next(5, 30), cancellationToken);
@@ -364,7 +364,7 @@ namespace InternProject.Services.UserService
 
         public async Task ResetPasswordAsync(ResetPasswordDto dto,CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email, StringComparison.CurrentCultureIgnoreCase),cancellationToken);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.Email.Equals(dto.Email.ToLower()),cancellationToken);
             if (user == null || user.IsPasswordResetVerified is not true)
             {
                 await Task.Delay(Random.Shared.Next(5, 30), cancellationToken);

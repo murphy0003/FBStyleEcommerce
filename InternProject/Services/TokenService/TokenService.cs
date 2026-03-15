@@ -19,7 +19,7 @@ namespace InternProject.Services.TokenService
                  new("role", user.Type.ToString())
             };
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Token")!));
+                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Secret")!));
 
             var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512);
 
